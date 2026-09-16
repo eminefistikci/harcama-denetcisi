@@ -43,11 +43,10 @@ def compose_filters(*predicates):
     return inner
 
 def apply_filter(transactions, predicate):
-    for transaction in transactions:
-        filter(predicate, transaction)
+    return filter(predicate, transactions)
 
 def is_in_period(transaction, *, start_date, end_date):
-    return transaction.date >= start_date and transaction.date <= end_date
+    return transaction.transaction_date >= start_date and transaction.transaction_date <= end_date
 
 def make_period_filter(start_date, end_date):
     return functools.partial(is_in_period, start_date= start_date, end_date= end_date)
