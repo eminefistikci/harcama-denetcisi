@@ -35,6 +35,7 @@ def build_parser():
     category_report_parser.add_argument("--end-date")
     category_report_parser.add_argument("--min-amount")
     category_report_parser.add_argument("--max-amount")
+    category_report_parser.add_argument("--currency")
     category_report_parser.set_defaults(func=cmd_category_report)
 
     monthly_report_parser=subparsers.add_parser("monthly-report")
@@ -44,6 +45,16 @@ def build_parser():
     monthly_report_parser.add_argument("--min-amount")
     monthly_report_parser.add_argument("--max-amount")
     monthly_report_parser.set_defaults(func=cmd_monthly_report)
+
+    merchant_report_parser=subparsers.add_parser("merchant-report")
+    merchant_report_parser.add_argument("--file", required=True)
+    merchant_report_parser.add_argument("--format", choices=["table", "json"], default="table")
+    merchant_report_parser.add_argument("--start-date")
+    merchant_report_parser.add_argument("--end-date")
+    merchant_report_parser.add_argument("--min-amount")
+    merchant_report_parser.add_argument("--max-amount")
+    merchant_report_parser.add_argument("--top", type=int, default=None)
+    merchant_report_parser.set_defaults(func=cmd_merchant_report)
 
     search_parser = subparsers.add_parser("search")
     search_parser.add_argument("--file", required=True)
@@ -63,26 +74,6 @@ def build_parser():
     duplicates_parser.add_argument("--window", type=int)
     duplicates_parser.set_defaults(func=cmd_duplicates)
 
-    export_parser=subparsers.add_parser("export")
-    export_parser.add_argument("--file", required=True)
-    export_parser.add_argument("--out", required=True)
-    export_parser.add_argument("--format", choices=["table", "json"], default="table")
-    export_parser.add_argument("--start-date")
-    export_parser.add_argument("--end-date")
-    export_parser.add_argument("--category", action=append)
-    export_parser.add_argument("--min-amount")
-    export_parser.add_argument("--max-amount")
-    export_parser.set_defaults(func=cmd_export)
-
-    merchant_report_parser=subparsers.add_parser("merchant-report")
-    merchant_report_parser.add_argument("--file", required=True)
-    merchant_report_parser.add_argument("--format", choices=["table", "json"], default="table")
-    merchant_report_parser.add_argument("--start-date")
-    merchant_report_parser.add_argument("--end-date")
-    merchant_report_parser.add_argument("--min-amount")
-    merchant_report_parser.add_argument("--max-amount")
-    merchant_report_parser.set_defaults(func=cmd_merchant_report)
-
     recurring_parser=subparsers.add_parser("recurring")
     recurring_parser.add_argument("--file", required=True)
     recurring_parser.add_argument("--format", choices=["table", "json"], default="table")
@@ -92,16 +83,30 @@ def build_parser():
     anomalies_parser.add_argument("--file", required=True)
     anomalies_parser.add_argument("--format", choices=["table", "json"], default="table")
     anomalies_parser.add_argument("--threshold")
+    anomalies_parser.add_argument("--multiplier", type=Decimal, default=Decimal("2.5"))
+    anomalies_parser.add_argument("--min-amount", type=Decimal, default=Decimal("500"))
     anomalies_parser.set_defaults(func=cmd_anomalies)
 
     compare_parser=subparsers.add_parser("compare")
     compare_parser.add_argument("--file", required=True)
     compare_parser.add_argument("--format", choices=["table", "json"], default="table")
-    compare_parser.add_argument("--period1-start")
-    compare_parser.add_argument("--period1-end")
-    compare_parser.add_argument("--period2-start")
-    compare_parser.add_argument("--period2-end")
+    compare_parser.add_argument("--period1", nargs=2, required=True)
+    compare_parser.add_argument("--period2", nargs=2, required=True)
     compare_parser.set_defaults(func=cmd_compare)
+
+    export_parser=subparsers.add_parser("export")
+    export_parser.add_argument("--file", required=True)
+    export_parser.add_argument("--report", required=True)
+    export_parser.add_argument("--output", required=True)
+    export_parser.add_argument("--format", choices=[ "json"], default="json")
+    export_parser.add_argument("--top", type=int, default=None)
+    export_parser.add_argument("--currency", help="Filter by currency")
+    export_parser.add_argument("--start-date")
+    export_parser.add_argument("--end-date")
+    export_parser.add_argument("--category", action="append")
+    export_parser.add_argument("--min-amount")
+    export_parser.add_argument("--max-amount")
+    export_parser.set_defaults(func=cmd_export)
 
     return parser
 
@@ -179,34 +184,137 @@ def cmd_summary(args):
     valid_transactions, rejected_rows = load_filtered_transactions(args)
     summaries = calculate_summary(valid_transactions)
 
-    print(f"Number of valid transactions: {len(valid_transactions)}")
-    print()
+    for curr in summaries.values():
+        print(f"Currency: {curr.currency}")
+        print(f"Number of valid transactions: {curr.transaction_count}")
+        print(f"Total expense: {curr.total_expense}")
+        print(f"Total income: {curr.income}")
+        print(f"Total refund: {curr.refund}")
+        print(f"Net expense: {curr.net_expense}")
+        print(f"Cash flow: {curr.cash_flow}")
+        print(f"Max expense: {curr.max_expense}")
+        print(f"Start date: {curr.start_date}")
+        print(f"End date: {curr.end_date}")
+        print("\n")
+    
+    print(f"Total rejected rows: {len(rejected_rows)}\n")
 
 def cmd_category_report(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    category_report = build_category_report(valid_transactions)
+
+    for cat in category_report:
+        print(f"Category: {cat["category"]}")
+        print(f"Expense: {cat["expense"]}")
+        print(f"Refund: {cat["refund"]}")
+        print(f"Net expense: {cat["net"]}")
+        print(f"Number of transactions: {cat["count"]}")
+        print(f"Net expense percentage: {cat["percentage"]}")
+        print("\n")
 
 def cmd_monthly_report(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    monthly_report = build_monthly_report(valid_transactions)
+
+    for item in monthly_report:
+        print(f"Month: {item["month"]}")
+        print(f"Currency: {item["currency"]}")
+        print(f"Income: {item["income"]}")
+        print(f"Refund: {item["refund"]}")
+        print(f"Expense: {item["expense"]}")
+        print(f"Net expense: {item["net"]}")
+        print(f"Cash flow: {item["cash_flow"]}")
+        print("\n")
 
 def cmd_merchant_report(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    merchant_report = build_merchant_report(valid_transactions, top=args.top)
+
+    for item in merchant_report:
+        print(f"Merchant: {item["merchant"]}")
+        print(f"Currency: {item["currency"]}")
+        print(f"Total expense: {item["total_expense"]}")
+        print(f"Total refund: {item["total_refund"]}")
+        print(f"Net expense: {item["net_expense"]}")
+        print(f"Transaction count: {item["transaction_count"]}")
+        print("\n")
 
 def cmd_search(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    
 
 def cmd_recurring(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    recurring_payments = find_recurring_payments(valid_transactions)
+
+    for item in recurring_payments:
+        print(f"Merchant: {item["merchant"]}")
+        print(f"Currency: {item["currency"]}")
+        print(f"Average amount: {item["average_amount"]}")
+        print(f"Number of payments: {item["count"]}")
+        print(f"First date of payments: {item["first_date"]}")
+        print(f"Last date of payments: {item["last_date"]}")
+        print(f"Expected next payment date: {item["next_date"]}")
+        print("\n")
 
 def cmd_duplicates(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    possible_duplicates = find_possible_duplicates(valid_transactions)
+
+    for group in possible_duplicates:
+        for item in group:
+            print(f"Transaction id: {item.transaction_id}")
+            print(f"Merchant: {item.merchant}")
+            print(f"Category: {item.category}")
+            print(f"Amount: {item.amount}")
+            print(f"Currency: {item.currency}")
+            print("\n")
 
 def cmd_anomalies(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    anomalies = find_anomalies(valid_transactions, multiplier=args.multiplier, min_amount=args.min_amount)
+
+    for entry in anomalies:
+        t = entry["transactions"]
+        print(f"Date: {t.date}")
+        print(f"Merchant: {t.merchant}")
+        print(f"Category: {t.category}")
+        print(f"Amount: {t.amount}")
+        print(f"Category Median: {entry['median']}")
+        print(f"Multiplier (Ratio): {entry['ratio']}")
+        print("\n")
 
 def cmd_compare(args):
-    pass
+    #!!!!
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    results = compare_periods(valid_transactions, args.period1, args.period2)
+
+    for currency, data in results.items():
+        print(f"Currency: {currency}")
+
+        for metric_name, diff in data.items():
+            if metric_name == "categories":
+                print("Categories:")
+                for cat, cat_diff in diff.items():
+                    print(f"{cat}: A={cat_diff['a']} B={cat_diff['b']} Diff={cat_diff['diff']} Change={cat_diff['pct_change']}%")
+            else:
+                print(f"{metric_name}: A={diff['a']} B={diff['b']} Diff={diff['diff']} Change={diff['pct_change']}%")
+        print()
 
 def cmd_export(args):
-    pass
+    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    match args.report:
+        case "summary":
+            result=calculate_summary(valid_transactions)
+        case "category-report":
+            result=build_category_report(valid_transactions)
+        case "monthly-report":
+            result=build_monthly_report(valid_transactions)
+        case "merchant-report":
+            result=build_merchant_report(valid_transactions, top=args.top)
+        case _:
+            raise ValueError("Unsupported report type")
+        
+    export_report(result, args.output, output_format=args.format)
 
 

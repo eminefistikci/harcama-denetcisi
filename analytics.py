@@ -123,12 +123,16 @@ def build_merchant_report(transactions,*, top=None):
     for (merchant, currency), group in itertools.groupby(sorted(transactions, key=key), key=key):
         items = list(group)
         total_expense = sum(item.amount for item in items if item.transaction_type == "expense")
-        transaction_count = len(item for item in items if item.transaction_type=="expense")
+        total_refund = sum(item.amount for item in items if item.transaction_type == "refund")
+        net_expense = total_expense - total_refund
+        transaction_count = len([item for item in items if item.transaction_type=="expense" or item.transaction_type == "refund"])
 
         merchant_report.append({
                                 "merchant":merchant,
                                 "currency":currency,
                                 "total_expense": total_expense,
+                                "total_refund": total_refund,
+                                "net_expense": net_expense,
                                 "transaction_count":transaction_count
         })
     merchant_report.sort(key= lambda x: x["total_expense"], reverse=True)
@@ -190,7 +194,7 @@ def find_possible_duplicates(transactions):
 
     for _, group in itertools.groupby(sorted(transactions, key=key), key=key):
         items = list(group)
-        if len(items) > 1:
+        if len(items) > 1 and len({item.transaction_id for item in items}) > 1:
             possible_duplicates.append(items)
     return possible_duplicates
 
@@ -209,7 +213,12 @@ def find_anomalies(transactions,*,multiplier=Decimal("2.5"), min_amount=Decimal(
         median = items[len(items)//2].amount if len(items)%2==1 else (items[len(items)//2 -1].amount + items[len(items)//2].amount) / Decimal(2)
         for item in items:
             if item.amount >= min_amount and item.amount >= median*multiplier:
-                anomalies.append(item)
+                ratio = (item.amount /median) if median !=Decimal("0") else Decimal("0")
+                anomalies.append({
+                    "transaction": item,
+                    "median": median,
+                    "ratio": ratio
+                })
     return anomalies
             
 def calculate_diff(a, b):
