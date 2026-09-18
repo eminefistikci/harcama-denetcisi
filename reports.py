@@ -64,7 +64,10 @@ def format_json(report_data):
         return json.dumps(report_data, default = str, indent =2)
 
 def print_report(report_data, *, output_format):
-    format_registry = {"table": format_table , "json": format_json}
+    format_registry = {
+        "table": format_table,
+        "json": format_json
+    }
     format_func = format_registry.get(output_format)
     if not format_func:
         raise ValueError(f"Invalid format: {output_format}")

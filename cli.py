@@ -7,29 +7,33 @@ from reports import *
 from analytics import *
 
 def main():
-    pass
+    parser=build_parser()
+    args=parser.parse_args()
+    args.func(args)
 
 def build_parser():
     parser = argparse.ArgumentParser(description = "harcama-denetcisi")
     subparsers = parser.add_subparsers(dest="command", required = True)
 
     validate_parser=subparsers.add_parser("validate", help="validates the file and the format")
-    validate_parser.add_argument("--file", required=True, help="path of the csv file")
+    validate_parser.add_argument("file", required=True, help="path of the csv file")
     validate_parser.add_argument("--format", choices =["table", "json"], default ="table", help="output format")
     validate_parser.set_defaults(func=cmd_validate)
 
     summary_parser =subparsers.add_parser("summary", help="shows the summary")
-    summary_parser.add_argument("--file", required=True, help="path of the csv file")
+    summary_parser.add_argument("file", required=True, help="path of the csv file")
     summary_parser.add_argument("--format", choices =["table", "json"], default="table")
     summary_parser.add_argument("--start-date")
     summary_parser.add_argument("--end-date")
-    summary_parser.add_argument("--category", action=append)
+    summary_parser.add_argument("--currency")
+    summary_parser.add_argument("--merchant")
+    summary_parser.add_argument("--category", action="append")
     summary_parser.add_argument("--min-amount")
     summary_parser.add_argument("--max-amount")
     summary_parser.set_defaults(func=cmd_summary)
 
     category_report_parser=subparsers.add_parser("category-report")
-    category_report_parser.add_argument("--file", required=True, help="path of the csv file")
+    category_report_parser.add_argument("file", required=True, help="path of the csv file")
     category_report_parser.add_argument("--format", choices =["table", "json"], default="table")
     category_report_parser.add_argument("--start-date")
     category_report_parser.add_argument("--end-date")
@@ -39,63 +43,65 @@ def build_parser():
     category_report_parser.set_defaults(func=cmd_category_report)
 
     monthly_report_parser=subparsers.add_parser("monthly-report")
-    monthly_report_parser.add_argument("--file", required=True, help="path of the csv file")
+    monthly_report_parser.add_argument("file", required=True, help="path of the csv file")
     monthly_report_parser.add_argument("--format", choices =["table", "json"], default="table")
-    monthly_report_parser.add_argument("--category", action=append)
+    monthly_report_parser.add_argument("--category", action="append")
     monthly_report_parser.add_argument("--min-amount")
     monthly_report_parser.add_argument("--max-amount")
+    monthly_report_parser.add_argument("--start-date")
+    monthly_report_parser.add_argument("--end-date")
     monthly_report_parser.set_defaults(func=cmd_monthly_report)
 
     merchant_report_parser=subparsers.add_parser("merchant-report")
-    merchant_report_parser.add_argument("--file", required=True)
+    merchant_report_parser.add_argument("file", required=True)
     merchant_report_parser.add_argument("--format", choices=["table", "json"], default="table")
     merchant_report_parser.add_argument("--start-date")
     merchant_report_parser.add_argument("--end-date")
     merchant_report_parser.add_argument("--min-amount")
     merchant_report_parser.add_argument("--max-amount")
+    merchant_report_parser.add_argument("--currency")
+    merchant_report_parser.add_argument("--category")
     merchant_report_parser.add_argument("--top", type=int, default=None)
     merchant_report_parser.set_defaults(func=cmd_merchant_report)
 
     search_parser = subparsers.add_parser("search")
-    search_parser.add_argument("--file", required=True)
+    search_parser.add_argument("file", required=True)
     search_parser.add_argument("--format", choices=["table", "json"], default="table")
     search_parser.add_argument("--query")
     search_parser.add_argument("--description")
     search_parser.add_argument("--start-date")
     search_parser.add_argument("--end-date")
-    search_parser.add_argument("--category", action=append)
+    search_parser.add_argument("--category", action="append")
     search_parser.add_argument("--min-amount")
     search_parser.add_argument("--max-amount")
     search_parser.set_defaults(func=cmd_search)
 
     duplicates_parser=subparsers.add_parser("duplicates")
-    duplicates_parser.add_argument("--file", required=True)
+    duplicates_parser.add_argument("file", required=True)
     duplicates_parser.add_argument("--format", choices=["table", "json"], default="table")
-    duplicates_parser.add_argument("--window", type=int)
     duplicates_parser.set_defaults(func=cmd_duplicates)
 
     recurring_parser=subparsers.add_parser("recurring")
-    recurring_parser.add_argument("--file", required=True)
+    recurring_parser.add_argument("file", required=True)
     recurring_parser.add_argument("--format", choices=["table", "json"], default="table")
     recurring_parser.set_defaults(func=cmd_recurring)
 
     anomalies_parser=subparsers.add_parser("anomalies")
-    anomalies_parser.add_argument("--file", required=True)
+    anomalies_parser.add_argument("file", required=True)
     anomalies_parser.add_argument("--format", choices=["table", "json"], default="table")
-    anomalies_parser.add_argument("--threshold")
     anomalies_parser.add_argument("--multiplier", type=Decimal, default=Decimal("2.5"))
     anomalies_parser.add_argument("--min-amount", type=Decimal, default=Decimal("500"))
     anomalies_parser.set_defaults(func=cmd_anomalies)
 
     compare_parser=subparsers.add_parser("compare")
-    compare_parser.add_argument("--file", required=True)
+    compare_parser.add_argument("file", required=True)
     compare_parser.add_argument("--format", choices=["table", "json"], default="table")
     compare_parser.add_argument("--period1", nargs=2, required=True)
     compare_parser.add_argument("--period2", nargs=2, required=True)
     compare_parser.set_defaults(func=cmd_compare)
 
     export_parser=subparsers.add_parser("export")
-    export_parser.add_argument("--file", required=True)
+    export_parser.add_argument("file", required=True)
     export_parser.add_argument("--report", required=True)
     export_parser.add_argument("--output", required=True)
     export_parser.add_argument("--format", choices=[ "json"], default="json")
@@ -187,7 +193,7 @@ def cmd_summary(args):
     for curr in summaries.values():
         print(f"Currency: {curr.currency}")
         print(f"Number of valid transactions: {curr.transaction_count}")
-        print(f"Total expense: {curr.total_expense}")
+        print(f"Total expense: {curr.expense}")
         print(f"Total income: {curr.income}")
         print(f"Total refund: {curr.refund}")
         print(f"Net expense: {curr.net_expense}")
@@ -240,8 +246,11 @@ def cmd_merchant_report(args):
         print("\n")
 
 def cmd_search(args):
-    valid_transactions, rejected_rows = load_filtered_transactions(args)
-    
+    predicate=build_filter_from_args(args)
+    rejected_rows=[]
+    transactions=iter_transactions(args.file, on_rejected=rejected_rows.append)
+    results=search_transactions(transactions, predicate)
+    print_report(results, output_format=args.format)
 
 def cmd_recurring(args):
     valid_transactions, rejected_rows = load_filtered_transactions(args)
@@ -275,8 +284,8 @@ def cmd_anomalies(args):
     anomalies = find_anomalies(valid_transactions, multiplier=args.multiplier, min_amount=args.min_amount)
 
     for entry in anomalies:
-        t = entry["transactions"]
-        print(f"Date: {t.date}")
+        t = entry["transaction"]
+        print(f"Date: {t.transaction_date}")
         print(f"Merchant: {t.merchant}")
         print(f"Category: {t.category}")
         print(f"Amount: {t.amount}")
