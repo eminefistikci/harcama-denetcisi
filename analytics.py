@@ -1,7 +1,7 @@
-from models import *
+from .models import *
 import itertools
-from normalizers import *
-from filters import *
+from .normalizers import *
+from .filters import *
 from decimal import Decimal
 from datetime import timedelta
 

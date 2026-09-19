@@ -1,4 +1,4 @@
-from models import Transaction, RejectedRow
+from .models import Transaction, RejectedRow
 from pydantic import ValidationError
 
 def validate_headers(headers):

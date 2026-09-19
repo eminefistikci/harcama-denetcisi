@@ -12,9 +12,9 @@ def make_transaction_filter(*, start_date=None,
                             max_amount=None):
 
     def inner(transaction):
-        if start_date is not None and transaction.date < start_date:
+        if start_date is not None and transaction.transaction_date < start_date:
             return False
-        if end_date is not None and transaction.date > end_date:
+        if end_date is not None and transaction.transaction_date > end_date:
             return False
         if categories is not None and transaction.category.lower() not in [c.lower() for c in categories]:
             return False

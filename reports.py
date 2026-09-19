@@ -1,6 +1,4 @@
-from pydantic import model_dump_json
 from decimal import Decimal
-import datetime
 from datetime import date
 import json
 from contextlib import contextmanager
@@ -10,58 +8,47 @@ def format_table(report_data):
     if not report_data:
         return "No matching data found."
 
-    headers = [str(k) for k in (report_data[0].model_dump().keys() if hasattr(report_data[0], "model_dump")
-               else report_data[0].keys())] #!!
-    
-    max_weight = []
+    items = (list(report_data.values()) if isinstance(report_data, dict) else report_data)
 
-    formatted_rows = []
-    for row in report_data:
-        if len(row) > max_weight:
-            max_weight = len(row)
+    if isinstance(items[0], list):
+        items = [x for sub in items for x in sub]
 
-        if hasattr(row, "model_dump"):
-            row = row.model_dump()
+    rows = [item.model_dump() if hasattr(item, "model_dump") else item for item in items]
+    headers = list(rows[0].keys())
 
-        row_values=[]
-        for val in row.values():
+    str_rows=[[f"{r.get(h):.2f}" if isinstance(r.get(h), Decimal) else str(r.get(h, "-")) for h in headers] for r in rows]
 
-            if isinstance(val, (Decimal, float)):
-                formatted_val = f"{val:.2f}"
-            elif isinstance(val, (date, datetime)):
-                formatted_val = val.isoformat()
-            else:
-                formatted_val = str(val)
-            row_values.append(formatted_val)
-        formatted_rows.append(row_values)
-
-    """
-    widths = [
-        max(len(h), max(len(val) for val in col))
-        for h, col in zip(headers, zip(*formatted_rows))
-    ]
+    widths = [max(len(h), max(len(row[i]) for row in str_rows)) for i, h in enumerate(headers)]
 
     header_line = " | ".join(h.ljust(w) for h, w in zip(headers, widths))
-    separator_line = "-+-".join("-" * w for w in widths)
+    sep_line = "-+-".join("-" * w for w in widths)
     data_lines = [
         " | ".join(val.ljust(w) for val, w in zip(row, widths))
-        for row in formatted_rows
+        for row in str_rows
     ]
 
-    return "\n".join([header_line, separator_line, *data_lines])
-    """
-
-#sütunları hizala
+    return "\n".join([header_line, sep_line, *data_lines])
 
 
+def serialize_helper(o):
+    if hasattr(o, "model_dump"):
+        return o.model_dump(mode="json")
+    elif isinstance(o, Decimal):
+        return float(o)
+    elif isinstance(o, date):
+        return o.isoformat()
+    else:
+        return str(o)
+    
 def format_json(report_data):
     if not report_data:
-        return "No report data"
-    if hasattr(report_data[0], "model_dump"):
-        data = [model.model_dump(mode = "json") for model in report_data]
-        return json.dumps(data, indent=2)
-    elif isinstance(report_data[0], dict):
-        return json.dumps(report_data, default = str, indent =2)
+        return "[]"
+
+    return json.dumps(
+        report_data,
+        default= serialize_helper,
+        indent=2
+    )
 
 def print_report(report_data, *, output_format):
     format_registry = {

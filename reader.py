@@ -1,5 +1,5 @@
-from validators import *
-from models import *
+from .validators import *
+from .models import *
 import csv
 import itertools
 
