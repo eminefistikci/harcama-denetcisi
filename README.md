@@ -119,3 +119,11 @@ Raporu atomik olarak bir JSON dosyasına aktarır:
 python -m harcama_denetcisi export harcama_denetcisi/ornek_harcamalar.csv --report category-report --output rapor.json --format json
 
 #### Tasarım ve Mimari Kararlar
+
+* **Pydantic v2 & Immutability (`models.py`):** Ham CSV satırları doğrulayıp `Transaction` modeline dönüştürülür.
+* **Lazy Evaluation (`reader.py`):** Büyük CSV dosyalarının tek seferde belleğe alınmasını önlemek için `yield` ve `yield from` kullanılmıştır.
+* **Closure ve Higher-Order Functions (`filters.py`):** Filtreleme mantığı `make_transaction_filter` fonksiyonuyla closure tabanlı bir predicate üretir.`compose_filters` ile birden fazla predicate `all()` kullanılarak birleştirilir. `make_period_filter` ise `functools.partial` yardımıyla oluşturulmuştur
+* **Decorator & Decorator Factory (`decorators.py`):** `@measure_runtime` decorator'ı ile analitik fonksiyonların çalışma süresi olçülürken, parametrik `@audit_action("action_name")` decorator factory ile başlangıç/bitiş logları rapor çıktısını bozmamak adına `sys.stderr` üzerinden basılır. Her iki decorator da meta veriyi korumak için `functools.wraps` kullanır.
+* **Context Manager ile Atomik Yazma (`reports.py`):** `export` komutunda veriler doğrudan hedef dosyaya yazılmaz. `@contextmanager` ile yazılan `atomic_writer`, veriyi önce geçici bir `.tmp` dosyasına yazar; işlem başarıyla bittiğinde `os.replace` ile atomik olarak hedef dosyanın yerine geçirir. Bir hata durumunda yarım dosya kalması engellenir.
+* **Registry Pattern (`reports.py`):** Tablo ve JSON biçimlendirme fonksiyonları uzun `if/elif` blokları yerine bir format registry sözlüğü üzerinden dinamik olarak seçilir.
+* **Fazladan CSV Sütunları Yönetimi (`extra="ignore"`):** Gerçek hayat banka ve finans ekstrelerinde uygulamada tanımlanmamış ek sütunlar  bulunabilir. `Transaction` modelinde `extra="ignore"` yapılandırması tercih edilerek, zorunlu alanları taşıyan fakat fazladan sütun içeren dosyaların gereksiz yere reddedilmesi önlenmiş, uygulamanın farklı banka ekstrelerine karşı esnekliği artırılmıştır.
