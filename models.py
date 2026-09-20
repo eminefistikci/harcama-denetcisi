@@ -7,11 +7,11 @@ from decimal import Decimal
 class Transaction(BaseModel):
     model_config = ConfigDict(frozen = True, str_strip_whitespace= True, extra = "ignore")
 
-    transaction_id: str
+    transaction_id: str = Field(min_length=1)
     transaction_date: date
     description: str | None = None
-    merchant: str
-    category: str
+    merchant: str = Field(min_length=1)
+    category: str = Field(min_length=1)
     transaction_type: Literal["expense", "income", "refund"]
     amount: Decimal = Field(gt = 0)
     currency: str
@@ -40,8 +40,8 @@ class CurrencySummary(BaseModel):
     total_refund: Decimal
     net_expense: Decimal
     cash_flow: Decimal
-    max_expense: Decimal
-    top_category: str
+    max_expense: Decimal | None =None
+    top_category: str | None = None
     start_date: date | None
     end_date: date | None
     currency: str

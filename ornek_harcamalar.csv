@@ -1,0 +1,125 @@
+transaction_id,transaction_date,description,merchant,category,transaction_type,amount,currency,payment_method,city
+TX-0001,2026-01-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,31000.00,TRY,Havale,İstanbul
+TX-0002,2026-01-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8500.00,TRY,Havale,İstanbul
+TX-0003,2026-01-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0004,2026-01-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0005,2026-01-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0006,2026-01-08,Ev interneti,NetHız,Fatura,expense,449.90,TRY,Otomatik Ödeme,İstanbul
+TX-0007,2026-01-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0008,2026-01-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,612.45,TRY,Otomatik Ödeme,İstanbul
+TX-0009,2026-01-13,Su faturası,Şehir Su,Fatura,expense,188.20,TRY,Otomatik Ödeme,İstanbul
+TX-0010,2026-01-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,986.35,TRY,Kredi Kartı,İstanbul
+TX-0011,2026-01-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,180.00,TRY,Banka Kartı,İstanbul
+TX-0012,2026-01-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,245.50,TRY,Banka Kartı,İstanbul
+TX-0013,2026-01-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,118.50,TRY,Banka Kartı,İstanbul
+TX-0014,2026-01-21,"Market alışverişi, temizlik ürünleri",MarketSepeti,Market,expense,742.80,TRY,Kredi Kartı,İstanbul
+TX-0015,2026-01-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,210.00,TRY,Banka Kartı,İstanbul
+TX-0016,2026-01-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,310.00,TRY,Kredi Kartı,İstanbul
+TX-0017,2026-01-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,264.90,TRY,Banka Kartı,İstanbul
+TX-0018,2026-02-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,31000.00,TRY,Havale,İstanbul
+TX-0019,2026-02-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8500.00,TRY,Havale,İstanbul
+TX-0020,2026-02-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0021,2026-02-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0022,2026-02-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0023,2026-02-08,Ev interneti,NetHız,Fatura,expense,449.90,TRY,Otomatik Ödeme,İstanbul
+TX-0024,2026-02-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0025,2026-02-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,705.30,TRY,Otomatik Ödeme,İstanbul
+TX-0026,2026-02-13,Su faturası,Şehir Su,Fatura,expense,194.75,TRY,Otomatik Ödeme,İstanbul
+TX-0027,2026-02-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,1044.20,TRY,Kredi Kartı,İstanbul
+TX-0028,2026-02-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,190.00,TRY,Banka Kartı,İstanbul
+TX-0029,2026-02-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,268.00,TRY,Banka Kartı,İstanbul
+TX-0030,2026-02-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,126.00,TRY,Banka Kartı,İstanbul
+TX-0031,2026-02-21,"Market alışverişi, temizlik ürünleri",MarketSepeti,Market,expense,812.65,TRY,Kredi Kartı,İstanbul
+TX-0032,2026-02-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,225.00,TRY,Banka Kartı,İstanbul
+TX-0033,2026-02-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,325.40,TRY,Kredi Kartı,İstanbul
+TX-0034,2026-02-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,189.50,TRY,Banka Kartı,İstanbul
+TX-0035,2026-03-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,32500.00,TRY,Havale,İstanbul
+TX-0036,2026-03-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8500.00,TRY,Havale,İstanbul
+TX-0037,2026-03-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0038,2026-03-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0039,2026-03-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0040,2026-03-08,Ev interneti,NetHız,Fatura,expense,449.90,TRY,Otomatik Ödeme,İstanbul
+TX-0041,2026-03-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0042,2026-03-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,658.10,TRY,Otomatik Ödeme,İstanbul
+TX-0043,2026-03-13,Su faturası,Şehir Su,Fatura,expense,201.30,TRY,Otomatik Ödeme,İstanbul
+TX-0044,2026-03-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,1125.60,TRY,Kredi Kartı,İstanbul
+TX-0045,2026-03-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,205.00,TRY,Banka Kartı,İstanbul
+TX-0046,2026-03-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,282.75,TRY,Banka Kartı,İstanbul
+TX-0047,2026-03-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,134.50,TRY,Banka Kartı,İstanbul
+TX-0048,2026-03-21,"Market alışverişi, temizlik ürünleri",MarketSepeti,Market,expense,796.45,TRY,Kredi Kartı,İstanbul
+TX-0049,2026-03-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,230.00,TRY,Banka Kartı,İstanbul
+TX-0050,2026-03-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,344.90,TRY,Kredi Kartı,İstanbul
+TX-0051,2026-03-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,315.00,TRY,Banka Kartı,İstanbul
+TX-0052,2026-04-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,32500.00,TRY,Havale,İstanbul
+TX-0053,2026-04-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8750.00,TRY,Havale,İstanbul
+TX-0054,2026-04-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0055,2026-04-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0056,2026-04-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0057,2026-04-08,Ev interneti,NetHız,Fatura,expense,459.90,TRY,Otomatik Ödeme,İstanbul
+TX-0058,2026-04-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0059,2026-04-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,522.90,TRY,Otomatik Ödeme,İstanbul
+TX-0060,2026-04-13,Su faturası,Şehir Su,Fatura,expense,210.15,TRY,Otomatik Ödeme,İstanbul
+TX-0061,2026-04-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,1098.35,TRY,Kredi Kartı,İstanbul
+TX-0062,2026-04-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,215.00,TRY,Banka Kartı,İstanbul
+TX-0063,2026-04-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,295.00,TRY,Banka Kartı,İstanbul
+TX-0064,2026-04-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,142.00,TRY,Banka Kartı,İstanbul
+TX-0065,2026-04-21,"Market alışverişi, temizlik ürünleri",  MarketSepeti  ,market,expense,854.70,TRY,Kredi Kartı,İstanbul
+TX-0066,2026-04-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,245.00,TRY,Banka Kartı,İstanbul
+TX-0067,2026-04-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,361.25,TRY,Kredi Kartı,İstanbul
+TX-0068,2026-04-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,228.40,TRY,Banka Kartı,İstanbul
+TX-0069,2026-05-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,32500.00,TRY,Havale,İstanbul
+TX-0070,2026-05-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8750.00,TRY,Havale,İstanbul
+TX-0071,2026-05-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0072,2026-05-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0073,2026-05-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0074,2026-05-08,Ev interneti,NetHız,Fatura,expense,459.90,TRY,Otomatik Ödeme,İstanbul
+TX-0075,2026-05-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0076,2026-05-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,488.75,TRY,Otomatik Ödeme,İstanbul
+TX-0077,2026-05-13,Su faturası,Şehir Su,Fatura,expense,219.60,TRY,Otomatik Ödeme,İstanbul
+TX-0078,2026-05-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,1210.40,TRY,Kredi Kartı,İstanbul
+TX-0079,2026-05-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,225.00,TRY,Banka Kartı,İstanbul
+TX-0080,2026-05-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,315.60,TRY,Banka Kartı,İstanbul
+TX-0081,2026-05-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,154.00,TRY,Banka Kartı,İstanbul
+TX-0082,2026-05-21,"Market alışverişi, temizlik ürünleri",MarketSepeti,Market,expense,902.30,TRY,Kredi Kartı,İstanbul
+TX-0083,2026-05-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,250.00,TRY,Banka Kartı,İstanbul
+TX-0084,2026-05-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,389.90,TRY,Kredi Kartı,İstanbul
+TX-0085,2026-05-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,342.80,TRY,Banka Kartı,İstanbul
+TX-0086,2026-06-01,Aylık maaş ödemesi,Örnek Yazılım AŞ,Maaş,income,34000.00,TRY,Havale,İstanbul
+TX-0087,2026-06-02,Aylık konut kirası,Ev Sahibi,Kira,expense,8750.00,TRY,Havale,İstanbul
+TX-0088,2026-06-03,Aylık bulut depolama,CloudBox,Abonelik,expense,4.99,USD,Kredi Kartı,
+TX-0089,2026-06-05,Dijital film aboneliği,FilmBox,Abonelik,expense,229.99,TRY,Kredi Kartı,
+TX-0090,2026-06-06,Müzik aboneliği,MusicPlus,Abonelik,expense,59.99,TRY,Kredi Kartı,
+TX-0091,2026-06-08,Ev interneti,NetHız,Fatura,expense,459.90,TRY,Otomatik Ödeme,İstanbul
+TX-0092,2026-06-10,Cep telefonu faturası,MobilTel,Fatura,expense,299.90,TRY,Otomatik Ödeme,İstanbul
+TX-0093,2026-06-12,Elektrik faturası,Enerji Dağıtım,Fatura,expense,560.20,TRY,Otomatik Ödeme,İstanbul
+TX-0094,2026-06-13,Su faturası,Şehir Su,Fatura,expense,232.45,TRY,Otomatik Ödeme,İstanbul
+TX-0095,2026-06-14,Haftalık mutfak alışverişi,MarketSepeti,Market,expense,1275.90,TRY,Kredi Kartı,İstanbul
+TX-0096,2026-06-15,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,240.00,TRY,Banka Kartı,İstanbul
+TX-0097,2026-06-16,Öğle yemeği,Kampüs Lokantası,Yemek,expense,338.50,TRY,Banka Kartı,İstanbul
+TX-0098,2026-06-17,Kahve ve tatlı,Kafe Mavi,Yemek,expense,169.50,TRY,Banka Kartı,İstanbul
+TX-0099,2026-06-21,"Market alışverişi, temizlik ürünleri",MarketSepeti,Market,expense,948.75,TRY,Kredi Kartı,İstanbul
+TX-0100,2026-06-23,Toplu taşıma kartı yükleme,ŞehirKart,Ulaşım,expense,265.00,TRY,Banka Kartı,İstanbul
+TX-0101,2026-06-25,Akşam yemeği,Ev Yemekleri,Yemek,expense,412.00,TRY,Kredi Kartı,İstanbul
+TX-0102,2026-06-27,Eczane alışverişi,Merkez Eczanesi,Sağlık,expense,276.30,TRY,Banka Kartı,İstanbul
+TX-0103,2026-01-20,Programlama kitapları,Kitap Dünyası,Eğitim,expense,850.00,TRY,Banka Kartı,İstanbul
+TX-0104,2026-02-11,Yabancı dil sınav başvurusu,Sınav Merkezi,Eğitim,expense,1200.00,TRY,Banka Kartı,Ankara
+TX-0105,2026-02-20,Kışlık mont,Giyim Atölyesi,Giyim,expense,1450.00,TRY,Kredi Kartı,İstanbul
+TX-0106,2026-03-04,Web sitesi geliştirme işi,Serbest Çalışma Müşterisi,Serbest Çalışma,income,4200.00,TRY,Havale,
+TX-0107,2026-03-14,POS alışverişi,Kafe Mavi,Yemek,expense,286.50,TRY,Kredi Kartı,İstanbul
+TX-0108,2026-03-14,POS alışverişi,Kafe Mavi,Yemek,expense,286.50,TRY,Kredi Kartı,İstanbul
+TX-0109,2026-03-18,Veri yapıları çevrim içi kursu,Online Akademi,Eğitim,expense,2100.00,TRY,Kredi Kartı,
+TX-0110,2026-04-09,Web sitesi geliştirme işi,Serbest Çalışma Müşterisi,Serbest Çalışma,income,3800.00,TRY,Havale,
+TX-0111,2026-04-20,Şehirler arası otobüs bileti,Yolcu Otobüs,Ulaşım,expense,780.00,TRY,Kredi Kartı,Ankara
+TX-0112,2026-04-25,Algoritma kitabı,Kitap Dünyası,Eğitim,expense,640.00,TRY,Banka Kartı,İstanbul
+TX-0113,2026-05-02,Algoritma kitabı iadesi,Kitap Dünyası,Eğitim,refund,640.00,TRY,Banka Kartı,İstanbul
+TX-0114,2026-05-15,Dizüstü bilgisayar,Teknoloji Merkezi,Teknoloji,expense,28499.90,TRY,Kredi Kartı,İstanbul
+TX-0115,2026-05-22,Toplu ev alışverişi,MarketSepeti,Market,expense,4850.00,TRY,Kredi Kartı,İstanbul
+TX-0116,2026-06-07,Web sitesi geliştirme işi,Serbest Çalışma Müşterisi,Serbest Çalışma,income,5100.00,TRY,Havale,
+TX-0117,2026-06-11,Mezuniyet yemeği,Boğaz Restoran,Yemek,expense,3250.00,TRY,Kredi Kartı,İstanbul
+TX-0118,2026-06-18,Bilgisayar aksesuarı iadesi,Teknoloji Merkezi,Teknoloji,refund,1500.00,TRY,Kredi Kartı,İstanbul
+TX-0010,2026-06-28,Tekrarlanan işlem kimliği,Örnek Market,Market,expense,175.00,TRY,Kredi Kartı,İstanbul
+ERR-0002,2026-02-30,Geçersiz tarih,Örnek Market,Market,expense,125.00,TRY,Kredi Kartı,İstanbul
+ERR-0003,2026-06-28,Eksik kategori,Örnek Market,,expense,220.00,TRY,Kredi Kartı,İstanbul
+ERR-0004,2026-06-28,Geçersiz tutar,Örnek Market,Market,expense,iki yüz,TRY,Kredi Kartı,İstanbul
+ERR-0005,2026-06-28,Geçersiz işlem türü,Örnek Market,Market,debit,200.00,TRY,Kredi Kartı,İstanbul
+ERR-0006,2026-06-28,Eksik para birimi,Örnek Market,Market,expense,200.00,,Kredi Kartı,İstanbul

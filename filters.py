@@ -1,5 +1,6 @@
 from decimal import Decimal
 import functools
+from datetime import date
 
 def make_transaction_filter(*, start_date=None, 
                             end_date=None, 
@@ -45,8 +46,13 @@ def compose_filters(*predicates):
 def apply_filter(transactions, predicate):
     return filter(predicate, transactions)
 
-def is_in_period(transaction, *, start_date, end_date):
-    return transaction.transaction_date >= start_date and transaction.transaction_date <= end_date
+def is_in_period(transaction, *,start_date, end_date):
+  if isinstance(start_date, str):
+    start_date = date.fromisoformat(start_date)
+  if isinstance(end_date, str):
+    end_date = date.fromisoformat(end_date)
+
+  return start_date <= transaction.transaction_date <= end_date
 
 def make_period_filter(start_date, end_date):
     return functools.partial(is_in_period, start_date= start_date, end_date= end_date)

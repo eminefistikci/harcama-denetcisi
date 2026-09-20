@@ -2,17 +2,19 @@ from .models import *
 import itertools
 from .normalizers import *
 from .filters import *
+from .decorators import *
 from decimal import Decimal
 from datetime import timedelta
+from collections import defaultdict
 
+@measure_runtime
 def calculate_summary(transactions):
     summaries={}
     transaction_list = list(transactions)
     key_func = lambda x: x.currency
     transaction_list.sort(key = key_func)
-    groups = list(itertools.groupby(transaction_list, key=key_func))
 
-    for currency, group in groups:
+    for currency, group in itertools.groupby(transaction_list, key=key_func):
         items = list(group)
         expenses = [item for item in items if item.transaction_type == "expense"]
         incomes= [item for item in items if item.transaction_type == "income"]
@@ -24,10 +26,11 @@ def calculate_summary(transactions):
         total_refund = sum(item.amount for item in refunds)
         net_expense = total_expense - total_refund
         cash_flow = total_income - net_expense
-        max_expense = max(expenses, key=lambda x:x.amount, default=None)
+        max_expense_item = max(expenses, key=lambda x:x.amount, default=None)
+        max_expense = (max_expense_item.amount if max_expense_item else Decimal("0.00"))
         
         category_totals = {category: sum(item.amount for item in group) for category, group in itertools.groupby(sorted(expenses, key = lambda x:x.category), key=lambda x:x.category)}
-        top_category = max(category_totals, key = category_totals.get)
+        top_category = max(category_totals, key = category_totals.get, default=None)
 
         start_date = min(item.transaction_date for item in items)
         end_date=max(item.transaction_date for item in items)
@@ -62,10 +65,11 @@ def group_totals(transactions, key):
         }
     return totals
 
+@audit_action("category_report")
 def build_category_report(transactions):
     transactions = list(transactions)
 
-    key_func = lambda x:(x.category, x.currency)
+    key_func = lambda x:(x.category.strip().title() , x.currency)
     totals = group_totals(transactions, key_func)
     summaries = calculate_summary(transactions)
 
@@ -164,7 +168,7 @@ def find_recurring_payments(transactions):
 
         valid_intervals=True
         for i in range(len(items)-1):
-            if 25 <= items[i+1].transaction_date.days - items[i].transaction_date.days <= 35:
+            if 25 <= (items[i+1].transaction_date - items[i].transaction_date).days <= 35:
                 continue
             else:
                 valid_intervals=False
@@ -206,7 +210,7 @@ def find_anomalies(transactions,*,multiplier=Decimal("2.5"), min_amount=Decimal(
     transactions = [t for t in transactions if t.transaction_type=="expense"]
     for _, group in itertools.groupby(sorted(transactions, key=key), key=key):
         items = list(group)
-        if len(items) <4:
+        if len(items) < 4:
             continue
 
         items.sort(key=lambda x: x.amount)
@@ -215,7 +219,11 @@ def find_anomalies(transactions,*,multiplier=Decimal("2.5"), min_amount=Decimal(
             if item.amount >= min_amount and item.amount >= median*multiplier:
                 ratio = (item.amount /median) if median !=Decimal("0") else Decimal("0")
                 anomalies.append({
-                    "transaction": item,
+                    "date": item.transaction_date,
+                    "merchant": item.merchant,
+                    "category": item.category,
+                    "amount": item.amount,
+                    "currency": item.currency,
                     "median": median,
                     "ratio": ratio
                 })
@@ -227,45 +235,49 @@ def calculate_diff(a, b):
     return {"a": a, "b":b,"diff": abs_diff, "perc_change": perc_change}
 
 def compare_periods(transactions, period_a, period_b):
-    filter_a = make_period_filter(*period_a)
-    filter_b = make_period_filter(*period_b)
+  filter_a = make_period_filter(*period_a)
+  filter_b = make_period_filter(*period_b)
 
-    tx_a = [t for t in transactions if filter_a(t)]
-    tx_b = [t for t in transactions if filter_b(t)]
+  tx_a = [t for t in transactions if filter_a(t)]
+  tx_b = [t for t in transactions if filter_b(t)]
 
-    sum_a = calculate_summary(tx_a)
-    sum_b = calculate_summary(tx_b)
+  sum_a = calculate_summary(tx_a)
+  sum_b = calculate_summary(tx_b)
 
-    category_a = build_category_report(tx_a)
-    category_b = build_category_report(tx_b)
+  cats_map_a = defaultdict(dict)
+  for row in build_category_report(tx_a):
+    cats_map_a[row["currency"]][row["category"]] = row["net"]
 
-    currencies = set(sum_a.keys()) | set(sum_b.keys())
-    results = {}
-    for currency in currencies:
-        sa = sum_a.get(currency)
-        sb = sum_b.get(currency)
+  cats_map_b = defaultdict(dict)
+  for row in build_category_report(tx_b):
+    cats_map_b[row["currency"]][row["category"]] = row["net"]
 
-        cats_a = category_a.get(currency, {})
-        cats_b = category_b.get(currency, {})
-        all_cats = set(cats_a.keys()) | set(cats_b.keys())
+  currencies = set(sum_a.keys()) | set(sum_b.keys())
+  results = []
+  for currency in currencies:
+    cats_a = cats_map_a.get(currency, {})
+    cats_b = cats_map_b.get(currency, {})
+    all_cats = set(cats_a.keys()) | set(cats_b.keys())
 
-        categories_diff = {
-            cat: calculate_diff(
-                cats_a.get(cat, Decimal("0")),
-                cats_b.get(cat, Decimal("0"))
-            )
-            for cat in all_cats
-        }
+    for cat in sorted(all_cats):
+      val_a = cats_a.get(cat, Decimal("0"))
+      val_b = cats_b.get(cat, Decimal("0"))
+      diff_info = calculate_diff(val_a, val_b)
 
-        results[currency] = {
-            "income": calculate_diff(getattr(sa, "income", Decimal("0")), getattr(sb, "income", Decimal("0"))),
-            "expense": calculate_diff(getattr(sa, "expense", Decimal("0")), getattr(sb, "expense", Decimal("0"))),
-            "refund": calculate_diff(getattr(sa, "refund", Decimal("0")), getattr(sb, "refund", Decimal("0"))),
-            "net_expense": calculate_diff(getattr(sa, "net_expense", Decimal("0")), getattr(sb, "net_expense", Decimal("0"))),
-            "categories": categories_diff,
-        }
+      results.append({
+          "currency": currency,
+          "category": cat,
+          "period1": diff_info["a"],
+          "period2": diff_info["b"],
+          "diff": diff_info["diff"],
+          "change_pct": (
+              round(diff_info["perc_change"], 2)
+              if diff_info["perc_change"] is not None
+              else "N/A"
+          ),
+      })
 
-    return results
+  return results
 
 
 

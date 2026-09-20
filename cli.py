@@ -191,11 +191,8 @@ def cmd_summary(args):
     result = calculate_summary(valid_transactions)
     print_report(result, output_format=args.format)
 
-    summary_data={
-        "summaries": result,
-        "rejected_count": len(rejected_rows)
-    }
-    print_report(summary_data, output_format=args.format)
+    if args.format == "table":
+        print(f"Total rejected rows: {len(rejected_rows)}")
 
 def cmd_category_report(args):
     valid_transactions, rejected_rows = load_filtered_transactions(args)
@@ -230,7 +227,10 @@ def cmd_duplicates(args):
     print_report(possible_duplicates, output_format=args.format)
 
 def cmd_anomalies(args):
-    valid_transactions, rejected_rows = load_filtered_transactions(args)
+    rejected_rows = []
+    valid_transactions = list(
+      iter_transactions(args.file, on_rejected=rejected_rows.append)
+  )
     anomalies = find_anomalies(valid_transactions, multiplier=args.multiplier, min_amount=args.min_amount)
     print_report(anomalies, output_format=args.format)
 

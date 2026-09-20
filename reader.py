@@ -4,7 +4,7 @@ import csv
 import itertools
 
 def iter_csv_rows(path):
-    with open(path, "r") as file:
+    with open(path, "r", encoding = "utf-8") as file:
         reader = csv.DictReader(file)
         validate_headers(reader.fieldnames)
         row_num = 2

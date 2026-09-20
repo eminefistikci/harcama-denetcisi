@@ -1,7 +1,7 @@
 import time
 import sys
 from functools import wraps
-import datetime
+from datetime import datetime
 
 def measure_runtime(func):
     @wraps(func)

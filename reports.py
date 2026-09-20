@@ -65,7 +65,7 @@ def print_report(report_data, *, output_format):
 def atomic_writer(path):
     temp_path = f"{path}.tmp"
     try:
-        with open(temp_path, "w") as f:
+        with open(temp_path, "w", encoding="utf-8") as f:
             yield f
         os.replace(temp_path, path)
     except Exception as exc:
