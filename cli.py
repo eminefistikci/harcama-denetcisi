@@ -1,4 +1,5 @@
 import argparse
+import sys
 from datetime import date
 from decimal import Decimal
 from .filters import *
@@ -9,7 +10,14 @@ from .analytics import *
 def main():
     parser=build_parser()
     args=parser.parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except (FileNotFoundError, ValueError) as err:
+        print(f"Error: {err}", file= sys.stderr)
+        sys.exit(1)
+    except Exception as err:
+        print(f"Unexpected error: {err}", file=sys.stderr)
+        sys.exit(1)
 
 def build_parser():
     parser = argparse.ArgumentParser(description = "harcama-denetcisi")
