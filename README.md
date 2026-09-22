@@ -125,5 +125,5 @@ python -m harcama_denetcisi export harcama_denetcisi/ornek_harcamalar.csv --repo
 
 ## Bilinen Sınırlamalar
 
-* Farklı para birimleri arasında otomatik kur dönüşümü yapılmaz; her para birimi bağımsız olarak analiz edilir ve raporlanır[cite: 11].
+* Farklı para birimleri arasında otomatik kur dönüşümü yapılmaz; her para birimi bağımsız olarak analiz edilir ve raporlanır.
 * Dönem karşılaştırmasında (`compare`), ilk dönemde harcaması bulunmayan (`0`) kategoriler için yüzde değişimi sıfıra bölme hatasını önlemek amacıyla `N/A` olarak gösterilir
